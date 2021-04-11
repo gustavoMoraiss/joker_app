@@ -5,9 +5,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.chucknorrisio.model.CategoryItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.xwray.groupie.GroupAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,10 +21,16 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private GroupAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -48,14 +48,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        RecyclerView rv_main = findViewById(R.id.rv_main);
+        adapter = new GroupAdapter();
+        rv_main.setAdapter(adapter);
+        rv_main.setLayoutManager(new LinearLayoutManager(this));
+        populateItems();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    private void populateItems(){
+        List<CategoryItem> items = new ArrayList<>();
+        items.add( new CategoryItem("cat1", 0xFF00FFFF));
+        items.add( new CategoryItem("cat2", 0xFFA0FFFF));
+        items.add( new CategoryItem("cat3", 0xFF00FFFF));
+        items.add( new CategoryItem("cat4", 0xFFA0FFFF));
+        items.add( new CategoryItem("cat5", 0xFF00FFFF));
+        items.add( new CategoryItem("cat6", 0xFFA0FFFF));
+        items.add( new CategoryItem("cat7", 0xFF00FFFF));
+        items.add( new CategoryItem("cat8", 0xFFA0FFFF));
+        items.add( new CategoryItem("cat9", 0xFF00FFFF));
+        items.add( new CategoryItem("cat10", 0xFFA0FFFF));
+        adapter.addAll(items);
+        adapter.notifyDataSetChanged();
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -68,14 +83,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
