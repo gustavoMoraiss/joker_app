@@ -1,11 +1,15 @@
 package com.example.chucknorrisio;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.chucknorrisio.model.CategoryItem;
+import com.example.chucknorrisio.presentation.CategoryPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -29,8 +33,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private AppBarConfiguration mAppBarConfiguration;
     private GroupAdapter adapter;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,25 +56,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter = new GroupAdapter();
         rv_main.setAdapter(adapter);
         rv_main.setLayoutManager(new LinearLayoutManager(this));
-        populateItems();
+
+        new CategoryPresenter(this).requestAll();
     }
 
-    private void populateItems(){
-        List<CategoryItem> items = new ArrayList<>();
-        items.add( new CategoryItem("cat1", 0xFF00FFFF));
-        items.add( new CategoryItem("cat2", 0xFFA0FFFF));
-        items.add( new CategoryItem("cat3", 0xFF00FFFF));
-        items.add( new CategoryItem("cat4", 0xFFA0FFFF));
-        items.add( new CategoryItem("cat5", 0xFF00FFFF));
-        items.add( new CategoryItem("cat6", 0xFFA0FFFF));
-        items.add( new CategoryItem("cat7", 0xFF00FFFF));
-        items.add( new CategoryItem("cat8", 0xFFA0FFFF));
-        items.add( new CategoryItem("cat9", 0xFF00FFFF));
-        items.add( new CategoryItem("cat10", 0xFFA0FFFF));
-        adapter.addAll(items);
+    public void hideProgressBar() {
+        if (progress != null) {
+            progress.hide();
+        }
+    }
+
+    public void showProgressBar() {
+        if (progress == null) {
+            progress = new ProgressDialog(this);
+            progress.setMessage(getString(R.string.load));
+            progress.setIndeterminate(true);
+            progress.setCancelable(false);
+        }
+        progress.show();
+    }
+
+    public void showCategories(List<CategoryItem> categoryItems) {
+        adapter.addAll(categoryItems);
         adapter.notifyDataSetChanged();
     }
 
+    public void showFailure(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
