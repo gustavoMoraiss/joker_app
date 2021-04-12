@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.chucknorrisio.datasource.CategoryDataSource;
 import com.example.chucknorrisio.model.CategoryItem;
 import com.example.chucknorrisio.presentation.CategoryPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rv_main.setAdapter(adapter);
         rv_main.setLayoutManager(new LinearLayoutManager(this));
 
-        new CategoryPresenter(this).requestAll();
+        CategoryDataSource dataSource = new CategoryDataSource();
+
+        new CategoryPresenter(this, dataSource).requestAll();
     }
 
     public void hideProgressBar() {
