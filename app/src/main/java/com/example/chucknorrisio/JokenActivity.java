@@ -9,6 +9,7 @@ import com.example.chucknorrisio.model.Joke;
 import com.example.chucknorrisio.presentation.JokePresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +46,6 @@ public class JokenActivity extends AppCompatActivity {
                 presenter.findJokeBy(category);
 
 
-
                 FloatingActionButton fab = findViewById(R.id.fab);
                 fab.setOnClickListener(view -> {
                     presenter.findJokeBy(category);
@@ -54,9 +55,12 @@ public class JokenActivity extends AppCompatActivity {
 
     }
 
-    public void showJoke(Joke joke){
+    public void showJoke(Joke joke) {
         TextView txtJoke = findViewById(R.id.txt_joken);
         txtJoke.setText(joke.getValue());
+
+        ImageView iv = findViewById(R.id.img_icon);
+        Picasso.get().load(joke.getIconUrl()).into(iv);
     }
 
     public void showFailure(String message) {
