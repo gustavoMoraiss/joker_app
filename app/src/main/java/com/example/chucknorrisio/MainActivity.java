@@ -1,6 +1,7 @@
 package com.example.chucknorrisio;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.xwray.groupie.GroupAdapter;
+import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -54,7 +57,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         RecyclerView rv_main = findViewById(R.id.rv_main);
+
+
         adapter = new GroupAdapter();
+        adapter.setOnItemClickListener((item, view) -> {
+            Intent intent = new Intent(MainActivity.this, JokenActivity.class);
+
+            CategoryItem categoryItem = (CategoryItem) item;
+
+            intent.putExtra(JokenActivity.CATEGORY_KEY, ((CategoryItem) item).getCategoryName());
+            startActivity(intent);
+        });
+
+
         rv_main.setAdapter(adapter);
         rv_main.setLayoutManager(new LinearLayoutManager(this));
 
